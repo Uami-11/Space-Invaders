@@ -1,4 +1,4 @@
-# sprites.py
+# sprites.py (minor tweaks for scaling consistency)
 import pygame
 import random
 from assets import *
@@ -10,7 +10,7 @@ class Player(pygame.sprite.Sprite):
         self.image = PLAYER_IMG
         self.rect = self.image.get_rect()
         self.rect.centerx = WIDTH // 2
-        self.rect.bottom = HEIGHT - 30
+        self.rect.bottom = HEIGHT - 50  # Moved up slightly for better look
         self.speed = 8
         self.lives = 3
         self.hidden = False
@@ -31,7 +31,7 @@ class Player(pygame.sprite.Sprite):
 
     def shoot(self):
         if not self.hidden:
-            return Bullet(self.rect.centerx, self.rect.top, PLAYER_BULLET_FRAMES, -10)
+            return Bullet(self.rect.centerx, self.rect.top, PLAYER_BULLET_FRAMES, -12)  # Faster bullet
         return None
 
     def die(self):
@@ -66,7 +66,7 @@ class Enemy(pygame.sprite.Sprite):
 
     def shoot(self):
         random.choice(ENEMY_SHOOT_SOUNDS).play()
-        return Bullet(self.rect.centerx, self.rect.bottom, ENEMY_BULLET_FRAMES, 5)
+        return Bullet(self.rect.centerx, self.rect.bottom, ENEMY_BULLET_FRAMES, 8)  # Faster bullet
 
 class MysteryShip(pygame.sprite.Sprite):
     def __init__(self):
@@ -74,8 +74,8 @@ class MysteryShip(pygame.sprite.Sprite):
         self.image = MYSTERY_IMG
         self.rect = self.image.get_rect()
         self.rect.x = -self.rect.width
-        self.rect.y = 60
-        self.speed = 3
+        self.rect.y = 80  # Slightly lower to avoid UI overlap
+        self.speed = 5  # Faster for scaled size
         MYSTERY_SOUND.play()
 
     def update(self):

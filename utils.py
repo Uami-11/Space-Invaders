@@ -1,4 +1,4 @@
-# utils.py
+# utils.py (updated UI positioning for lives)
 import pygame
 from constants import *
 

@@ -1,8 +1,9 @@
+# main.py (updated enemy formation and UI)
 import pygame
 import random
 import sys
 from constants import *
-pygame.init()
+# pygame.mixer.init() for sound
 pygame.mixer.init()
 
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -11,7 +12,6 @@ from sprites import *
 from utils import *
 from assets import *
 
-# Initialize Pygame
 
 CLOCK = pygame.time.Clock()
 
@@ -38,24 +38,24 @@ def start_game():
     player = Player()
     all_sprites.add(player)
 
-    # Create enemies
+    # Create enemies (more compact: reduced spacing)
     for row in range(5):
         enemy_type = "back" if row == 0 else "middle" if row < 3 else "front"
         for col in range(11):
-            enemy = Enemy(100 + col * 60, 80 + row * 60, enemy_type)
+            enemy = Enemy(80 + col * 40, 60 + row * 40, enemy_type)  # Tighter: 40px vs 60px
             all_sprites.add(enemy)
             enemies.add(enemy)
 
-    # Create barriers
+    # Create barriers (adjusted for larger size)
     for i in range(4):
-        x = 150 + i * 150
-        barrier = Barrier(x, HEIGHT - 150)
+        x = 120 + i * 170  # Slightly wider spacing to fit scaled barriers
+        barrier = Barrier(x, HEIGHT - 120)
         all_sprites.add(barrier)
         barriers.add(barrier)
 
     # Reset variables
     enemy_direction = 1
-    enemy_speed = 1
+    enemy_speed = 1.5  # Slightly faster for compact formation
     mystery_timer = pygame.time.get_ticks() + random.randint(10000, 20000)
     last_enemy_shoot = 0
 
@@ -63,8 +63,8 @@ def start_game():
 
 # Enemy movement variables
 enemy_direction = 1
-enemy_drop = 30
-enemy_speed = 1
+enemy_drop = 20  # Smaller drop for compact feel
+enemy_speed = 1.5
 
 # Mystery ship timer
 mystery_timer = pygame.time.get_ticks() + random.randint(10000, 20000)
@@ -111,7 +111,7 @@ while running:
     move_down = False
     for enemy in enemies:
         enemy.rect.x += enemy_direction * enemy_speed
-        if enemy.rect.right >= WIDTH or enemy.rect.left <= 0:
+        if enemy.rect.right >= WIDTH - 20 or enemy.rect.left <= 20:  # Adjusted for larger sprites
             move_down = True
         if enemy.rect.bottom >= HEIGHT - 100:
             game_state = GAME_OVER
@@ -176,9 +176,9 @@ while running:
     SCREEN.fill(BLACK)
     all_sprites.draw(SCREEN)
 
-    # UI
-    draw_text(SCREEN, f"Score: {score}", SMALL_FONT, WHITE, 80, 20, center=False)
-    draw_text(SCREEN, f"Lives: {player.lives}", SMALL_FONT, WHITE, WIDTH - 80, 20, center=False)
+    # UI (fixed lives positioning)
+    draw_text(SCREEN, f"Score: {score}", SMALL_FONT, WHITE, 20, 10, center=False)  # Top-left
+    draw_text(SCREEN, f"Lives: {player.lives}", SMALL_FONT, WHITE, WIDTH - 120, 10, center=False)  # Top-right, moved inward
 
     pygame.display.flip()
 

@@ -1,3 +1,4 @@
+# constants.py (unchanged - included for completeness)
 import pygame
 
 # Initialize pygame early to ensure font subsystem is ready
@@ -11,11 +12,10 @@ FPS = 60
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
-# Fonts - now using your custom pixel font for that retro look!
-PIXEL_FONT_PATH = "assets/fonts/determination-mono.ttf"  # Adjust if filename is different (e.g., .ttf vs .TTF)
-
-FONT = pygame.font.Font(PIXEL_FONT_PATH, 48)          # Larger for title
-SMALL_FONT = pygame.font.Font(PIXEL_FONT_PATH, 32)     # Smaller for UI / instructions
+# Fonts - using custom pixel font
+PIXEL_FONT_PATH = "assets/fonts/determination-mono.ttf"
+FONT = pygame.font.Font(PIXEL_FONT_PATH, 48)          # Title
+SMALL_FONT = pygame.font.Font(PIXEL_FONT_PATH, 32)     # UI / instructions
 
 # Game states
 START_SCREEN = 0
