@@ -2,15 +2,16 @@ import pygame
 import random
 import sys
 from constants import *
+pygame.init()
+pygame.mixer.init()
+
+SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Space Invaders")
 from sprites import *
 from utils import *
 from assets import *
 
 # Initialize Pygame
-pygame.mixer.init()
-
-SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Space Invaders")
 
 CLOCK = pygame.time.Clock()
 
