@@ -24,3 +24,11 @@ def show_game_over(screen, score):
     draw_text(screen, "Try Again (R)", SMALL_FONT, WHITE, WIDTH//2, HEIGHT//2 + 20)
     draw_text(screen, "Quit (Q)", SMALL_FONT, WHITE, WIDTH//2, HEIGHT//2 + 70)
     pygame.display.flip()
+
+def show_win_screen(screen, score):
+    screen.fill(BLACK)
+    draw_text(screen, "YOU WIN!", FONT, WHITE, WIDTH // 2, HEIGHT // 3)
+    draw_text(screen, f"Final Score: {score}", SMALL_FONT, WHITE, WIDTH // 2, HEIGHT // 2 - 40)
+    draw_text(screen, "Play Again (R)", SMALL_FONT, WHITE, WIDTH // 2, HEIGHT // 2 + 20)
+    draw_text(screen, "Quit (Q)", SMALL_FONT, WHITE, WIDTH // 2, HEIGHT // 2 + 70)
+    pygame.display.flip()

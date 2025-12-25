@@ -102,6 +102,11 @@ while running:
                     game_state = start_game()
                 elif event.key == pygame.K_q:
                     running = False
+            elif game_state == WIN:
+                if event.key == pygame.K_r:
+                    game_state = start_game()
+                elif event.key == pygame.K_q:
+                    running = False
 
     if game_state == START_SCREEN:
         show_start_screen(SCREEN)
@@ -109,6 +114,9 @@ while running:
 
     elif game_state == GAME_OVER:
         show_game_over(SCREEN, score)
+        continue
+    elif game_state == WIN:
+        show_win_screen(SCREEN, score)
         continue
 
     # === PLAYING STATE ===
@@ -179,7 +187,7 @@ while running:
 
     # Win condition (restart wave)
     if not enemies:
-        game_state = start_game()
+        game_state = WIN
 
     # Draw
     SCREEN.fill(BLACK)
