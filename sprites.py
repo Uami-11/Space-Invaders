@@ -1,8 +1,10 @@
 # sprites.py (minor tweaks for scaling consistency)
 import pygame
 import random
+
 from assets import *
 from constants import WIDTH, HEIGHT
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -27,11 +29,17 @@ class Player(pygame.sprite.Sprite):
                 self.rect.x -= self.speed
             if keys[pygame.K_RIGHT]:
                 self.rect.x += self.speed
+
             self.rect.x = max(0, min(WIDTH - self.rect.width, self.rect.x))
 
     def shoot(self):
         if not self.hidden:
-            return Bullet(self.rect.centerx, self.rect.top, PLAYER_BULLET_FRAMES, -12)  # Faster bullet
+            return Bullet(
+                self.rect.centerx,
+                self.rect.top,
+                PLAYER_BULLET_FRAMES,
+                -12,  # Faster bullet
+            )
         return None
 
     def die(self):
@@ -41,6 +49,7 @@ class Player(pygame.sprite.Sprite):
         PLAYER_DEATH_SOUND.play()
         explosion = Explosion(self.rect.center, PLAYER_EXPLOSION_IMG)
         return explosion, self.lives <= 0
+
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, x, y, type_):
@@ -57,7 +66,6 @@ class Enemy(pygame.sprite.Sprite):
         self.frame_rate = 500  # ms per frame for enemy animation
 
     def update(self):
-        # Animate
         now = pygame.time.get_ticks()
         if now - self.last_update > self.frame_rate:
             self.frame_index = (self.frame_index + 1) % len(self.frames)
@@ -66,7 +74,13 @@ class Enemy(pygame.sprite.Sprite):
 
     def shoot(self):
         random.choice(ENEMY_SHOOT_SOUNDS).play()
-        return Bullet(self.rect.centerx, self.rect.bottom, ENEMY_BULLET_FRAMES, 8)  # Faster bullet
+        return Bullet(
+            self.rect.centerx,
+            self.rect.bottom,
+            ENEMY_BULLET_FRAMES,
+            8,  # Faster bullet
+        )
+
 
 class MysteryShip(pygame.sprite.Sprite):
     def __init__(self):
@@ -83,6 +97,7 @@ class MysteryShip(pygame.sprite.Sprite):
         if self.rect.left > WIDTH:
             self.kill()
 
+
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y, frames, speed):
         super().__init__()
@@ -97,17 +112,16 @@ class Bullet(pygame.sprite.Sprite):
         self.frame_rate = 60  # ms per frame for bullet animation
 
     def update(self):
-        # Animate
         now = pygame.time.get_ticks()
         if now - self.last_update > self.frame_rate:
             self.frame_index = (self.frame_index + 1) % len(self.frames)
             self.image = self.frames[self.frame_index]
             self.last_update = now
 
-        # Move
         self.rect.y += self.speed
         if self.rect.bottom < 0 or self.rect.top > HEIGHT:
             self.kill()
+
 
 class Barrier(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -127,6 +141,7 @@ class Barrier(pygame.sprite.Sprite):
         self.image.set_alpha(alpha)
         if self.hits >= self.max_hits:
             self.kill()
+
 
 class Explosion(pygame.sprite.Sprite):
     def __init__(self, center, img):

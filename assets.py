@@ -2,14 +2,14 @@
 import pygame
 import os
 
-def load_image(name, scale_factor=2.0):
+def load_image(name, scale_factor=3.0):
     path = os.path.join("assets", "images", name)
     image = pygame.image.load(path).convert()  # Using .convert() as per previous fix
     # Scale the image
     new_size = (int(image.get_width() * scale_factor), int(image.get_height() * scale_factor))
     return pygame.transform.scale(image, new_size)
 
-def load_animation(base_name, num_frames, scale_factor=2.0):
+def load_animation(base_name, num_frames, scale_factor=3.0):
     frames = []
     for i in range(1, num_frames + 1):
         filename = f"{base_name}{i}.png"
@@ -42,4 +42,4 @@ ENEMY_SHOOT_SOUNDS = [
     pygame.mixer.Sound(os.path.join("assets", "sounds", "enemy_shoot1.wav")),
     pygame.mixer.Sound(os.path.join("assets", "sounds", "enemy_shoot2.wav"))
 ]
-MYSTERY_SOUND = pygame.mixer.Sound(os.path.join("assets", "sounds", "mystery_ship.wav"))
+MYSTERY_SOUND = pygame.mixer.Sound(os.path.join("assets", "sounds", "mystery_ship.wav"))            

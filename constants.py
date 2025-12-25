@@ -21,3 +21,4 @@ SMALL_FONT = pygame.font.Font(PIXEL_FONT_PATH, 32)     # UI / instructions
 START_SCREEN = 0
 PLAYING = 1
 GAME_OVER = 2
+WIN = 3

@@ -1,8 +1,10 @@
-# main.py (updated enemy formation and UI)
+# main.py (updated enemy movement and game-over logic)
 import pygame
 import random
 import sys
+
 from constants import *
+
 # pygame.mixer.init() for sound
 pygame.mixer.init()
 
@@ -11,7 +13,6 @@ pygame.display.set_caption("Space Invaders")
 from sprites import *
 from utils import *
 from assets import *
-
 
 CLOCK = pygame.time.Clock()
 
@@ -26,8 +27,10 @@ game_state = START_SCREEN
 score = 0
 player = None
 
+
 def start_game():
     global player, score, enemy_direction, enemy_speed, mystery_timer, last_enemy_shoot
+
     all_sprites.empty()
     enemies.empty()
     bullets.empty()
@@ -38,33 +41,35 @@ def start_game():
     player = Player()
     all_sprites.add(player)
 
-    # Create enemies (more compact: reduced spacing)
+    # Create enemies (compact formation)
     for row in range(5):
         enemy_type = "back" if row == 0 else "middle" if row < 3 else "front"
         for col in range(11):
-            enemy = Enemy(80 + col * 40, 60 + row * 40, enemy_type)  # Tighter: 40px vs 60px
+            enemy = Enemy(80 + col * 40, 60 + row * 40, enemy_type)
             all_sprites.add(enemy)
             enemies.add(enemy)
 
-    # Create barriers (adjusted for larger size)
+    # Create barriers
     for i in range(4):
-        x = 120 + i * 170  # Slightly wider spacing to fit scaled barriers
+        x = 120 + i * 170
         barrier = Barrier(x, HEIGHT - 120)
         all_sprites.add(barrier)
         barriers.add(barrier)
 
     # Reset variables
     enemy_direction = 1
-    enemy_speed = 1.5  # Slightly faster for compact formation
+    enemy_speed = 1.5  # Initial speed
     mystery_timer = pygame.time.get_ticks() + random.randint(10000, 20000)
     last_enemy_shoot = 0
 
     return PLAYING
 
+
 # Enemy movement variables
 enemy_direction = 1
-enemy_drop = 20  # Smaller drop for compact feel
+enemy_drop = 10  # Reduced from 20 for slower descent
 enemy_speed = 1.5
+max_enemy_speed = 3.0  # New: Cap speed to prevent "super fast" movement
 
 # Mystery ship timer
 mystery_timer = pygame.time.get_ticks() + random.randint(10000, 20000)
@@ -83,6 +88,7 @@ while running:
         if event.type == pygame.KEYDOWN:
             if game_state == START_SCREEN:
                 game_state = start_game()
+
             elif game_state == PLAYING:
                 if event.key == pygame.K_SPACE:
                     bullet = player.shoot()
@@ -90,6 +96,7 @@ while running:
                         all_sprites.add(bullet)
                         bullets.add(bullet)
                         SHOOT_SOUND.play()
+
             elif game_state == GAME_OVER:
                 if event.key == pygame.K_r:
                     game_state = start_game()
@@ -111,16 +118,18 @@ while running:
     move_down = False
     for enemy in enemies:
         enemy.rect.x += enemy_direction * enemy_speed
-        if enemy.rect.right >= WIDTH - 20 or enemy.rect.left <= 20:  # Adjusted for larger sprites
+
+        if enemy.rect.right >= WIDTH - 20 or enemy.rect.left <= 20:
             move_down = True
-        if enemy.rect.bottom >= HEIGHT - 100:
+
+        if enemy.rect.bottom >= HEIGHT - 50:  # Lowered from -100 for more play area
             game_state = GAME_OVER
 
     if move_down:
         enemy_direction *= -1
         for enemy in enemies:
             enemy.rect.y += enemy_drop
-        enemy_speed += 0.2
+        enemy_speed = min(enemy_speed + 0.1, max_enemy_speed)
 
     # Random enemy shooting
     now = pygame.time.get_ticks()
@@ -176,9 +185,17 @@ while running:
     SCREEN.fill(BLACK)
     all_sprites.draw(SCREEN)
 
-    # UI (fixed lives positioning)
-    draw_text(SCREEN, f"Score: {score}", SMALL_FONT, WHITE, 20, 10, center=False)  # Top-left
-    draw_text(SCREEN, f"Lives: {player.lives}", SMALL_FONT, WHITE, WIDTH - 120, 10, center=False)  # Top-right, moved inward
+    # UI
+    draw_text(SCREEN, f"Score: {score}", SMALL_FONT, WHITE, 20, 10, center=False)
+    draw_text(
+        SCREEN,
+        f"Lives: {player.lives}",
+        SMALL_FONT,
+        WHITE,
+        WIDTH - 150,
+        10,
+        center=False,
+    )
 
     pygame.display.flip()
 
