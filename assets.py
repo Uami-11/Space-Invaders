@@ -4,13 +4,13 @@ import os
 
 def load_image(name):
     path = os.path.join("assets", "images", name)
-    return pygame.image.load(path).convert_alpha()
+    return pygame.image.load(path).convert()  # Changed from convert_alpha()
 
 def load_animation(base_name, num_frames):
     frames = []
     for i in range(1, num_frames + 1):
         filename = f"{base_name}{i}.png"
-        img = load_image(filename)
+        img = load_image(filename)  # Will use .convert()
         frames.append(img)
     return frames
 
